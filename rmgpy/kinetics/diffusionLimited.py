@@ -33,6 +33,7 @@ import math
 import numpy as np
 
 import rmgpy.constants as constants
+from rmgpy.kLAkH import LiquidVolumetricMassTransferCoefficientData, HenryLawConstantData
 
 
 class DiffusionLimited(object):
@@ -151,6 +152,31 @@ class DiffusionLimited(object):
 
         return k_diff
 
+    def get_henry_law_constant_data(self, spec):
+        solute_data = self.database.get_solute_data(spec)
+        solvent_data = self.solvent_data
+
+        Tmin = solvent_data.get_solvent_coolprop_Tmin()
+        Tcrit = solvent_data.get_solvent_coolprop_Tcrit() 
+        Ts = [float(T) for T in np.linspace(Tmin, Tcrit-0.01, 50)]
+        kHs = [self.database.get_T_dep_solvation_energy_from_LSER_298(solute_data, solvent_data, T)[1]* solvent_data.get_solvent_saturation_pressure(T) for T in Ts]
+
+        return HenryLawConstantData(Ts=Ts, kHs=kHs)
+
+    def get_liquid_volumetric_mass_transfer_coefficient_data(self, species, prefactor=0, diffusion_coefficient_power=0, solvent_viscosity_power=0, solvent_density_power=0):
+        solute_data = self.database.get_solute_data(spec)
+        solvent_data = self.solvent_data
+
+        D = solute_data.get_stokes_diffusivity(T, self.get_solvent_viscosity(T))
+        mu = solvent_data.get_solvent_viscosity(T)
+        rho = solvent_data.get_solvent_density(T)
+
+        Tmin = solvent_data.get_solvent_coolprop_Tmin()
+        Tcrit = solvent_data.get_solvent_coolprop_Tcrit() 
+        Ts = [float(T) for T in np.linspace(Tmin, Tcrit-0.01, 50)]
+        kLAs = [prefactor * D**diffusion_coefficient_power * mu**solvent_viscosity_power * rho**solvent_density_power for T in Ts]
+
+        return LiquidVolumetricMassTransferCoefficientData(Ts=Ts, kLAs=kLAs)
 
 # module level variable. There should only ever be one. It starts off disabled
 diffusion_limiter = DiffusionLimited()
