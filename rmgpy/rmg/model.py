@@ -869,6 +869,10 @@ class CoreEdgeReactionModel:
                 logging.info('Species {0} renamed {1} based on thermo library name'.format(spc.label, spc.thermo.label))
                 spc.label = spc.thermo.label
 
+        if self.liquid_volumetric_mass_transfer_coefficient_power_law:
+                spc.get_liquid_volumetric_mass_transfer_coefficient_data(self.liquid_volumetric_mass_transfer_coefficient_power_law)
+                spc.get_henry_law_constant_data()
+
         spc.generate_energy_transfer_model()
 
     def process_coverage_dependence(self, kinetics):
@@ -1611,6 +1615,9 @@ class CoreEdgeReactionModel:
         for spec in self.new_species_list:
             if spec.reactive:
                 submit(spec, self.solvent_name)
+            if self.liquid_volumetric_mass_transfer_coefficient_power_law:
+                spec.get_liquid_volumetric_mass_transfer_coefficient_data(self.liquid_volumetric_mass_transfer_coefficient_power_law)
+                spec.get_henry_law_constant_data()
 
             self.add_species_to_core(spec)
 
@@ -1621,6 +1628,9 @@ class CoreEdgeReactionModel:
                 # ...but are Seed Mechanisms run through PDep? Perhaps not.
                 for spec in itertools.chain(rxn.reactants, rxn.products):
                     submit(spec, self.solvent_name)
+                    if self.liquid_volumetric_mass_transfer_coefficient_power_law:
+                        spec.get_liquid_volumetric_mass_transfer_coefficient_data(self.liquid_volumetric_mass_transfer_coefficient_power_law)
+                        spec.get_henry_law_constant_data()
 
                 rxn.fix_barrier_height(force_positive=True)
             self.add_reaction_to_core(rxn)
@@ -1712,6 +1722,9 @@ class CoreEdgeReactionModel:
         for spec in self.new_species_list:
             if spec.reactive:
                 submit(spec, self.solvent_name)
+            if self.liquid_volumetric_mass_transfer_coefficient_power_law:
+                spec.get_liquid_volumetric_mass_transfer_coefficient_data(self.liquid_volumetric_mass_transfer_coefficient_power_law)
+                spec.get_henry_law_constant_data()
 
             self.add_species_to_edge(spec)
 
