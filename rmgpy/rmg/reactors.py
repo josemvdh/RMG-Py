@@ -423,11 +423,11 @@ class ConstantTVLiquidReactor(Reactor):
 
         if self.outlet_conditions:
             total_molar_flow_rate = self.outlet_conditions["Vout"]
-            outlet = rms.ConstantVolumetricFlowRateOutlet(domain,lambda t: total_molar_flow_rate)
+            outlet = rms.VolumetricFlowRateOutlet(domain,lambda t: total_molar_flow_rate)
             interfaces.append(outlet)
 
         if self.evap_cond_conditions:
-            kLA_kH_evap_cond = rms.kLAkHCondensationEvaporation(domain,self.evap_cond_conditions)
+            kLA_kH_evap_cond = rms.kLAkHCondensationEvaporationWithReservoir(domain,self.evap_cond_conditions)
             interfaces.append(kLA_kH_evap_cond)
             
         react = rms.Reactor(domain, y0, (0.0, self.tf), interfaces, p=p)

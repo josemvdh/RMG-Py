@@ -105,9 +105,9 @@ cdef class Species:
 
     cpdef set_structure(self, str structure)
 
-    cpdef object get_henry_law_constant_data(self)
+    cpdef object get_henry_law_constant_data(self, list Ts=?)
 
-    cpdef object get_liquid_volumetric_mass_transfer_coefficient_data(self, object liquid_volumetric_mass_transfer_coefficient_power_law=?)
+    cpdef object get_liquid_volumetric_mass_transfer_coefficient_data(self, object liquid_volumetric_mass_transfer_coefficient_power_law=?, list Ts=?)
     
 ################################################################################
 

@@ -847,21 +847,21 @@ class Species(object):
                     raise
             self.generate_resonance_structures()
 
-    def get_henry_law_constant_data(self):
+    def get_henry_law_constant_data(self, Ts=[]):
 
         if self.henry_law_constant_data:
             return self.henry_law_constant_data
 
         if diffusion_limiter.enabled:
 
-            self.henry_law_constant_data = diffusion_limiter.get_henry_law_constant_data(self)
+            self.henry_law_constant_data = diffusion_limiter.get_henry_law_constant_data(self, Ts=Ts)
 
             return self.henry_law_constant_data
         else:
             raise Exception('Unable to calculate henry law constant when the diffusion limiter isn\'t enabled.')
         
 
-    def get_liquid_volumetric_mass_transfer_coefficient_data(self, liquid_volumetric_mass_transfer_coefficient_power_law=dict()):
+    def get_liquid_volumetric_mass_transfer_coefficient_data(self, liquid_volumetric_mass_transfer_coefficient_power_law=None, Ts=[]):
 
         if self.liquid_volumetric_mass_transfer_coefficient_data:
             return self.liquid_volumetric_mass_transfer_coefficient_data
@@ -873,7 +873,7 @@ class Species(object):
             solvent_viscosity_power = liquid_volumetric_mass_transfer_coefficient_power_law.solvent_viscosity_power
             solvent_density_power = liquid_volumetric_mass_transfer_coefficient_power_law.solvent_density_power
 
-            self.liquid_volumetric_mass_transfer_coefficient_data = diffusion_limiter.get_liquid_volumetric_mass_transfer_coefficient_data(self, prefactor=prefactor, diffusion_coefficient_power=diffusion_coefficient_power,
+            self.liquid_volumetric_mass_transfer_coefficient_data = diffusion_limiter.get_liquid_volumetric_mass_transfer_coefficient_data(self, Ts=Ts, prefactor=prefactor, diffusion_coefficient_power=diffusion_coefficient_power,
                                                                                         solvent_viscosity_power=solvent_viscosity_power, solvent_density_power=solvent_density_power)
 
             return self.liquid_volumetric_mass_transfer_coefficient_data
