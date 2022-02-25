@@ -160,7 +160,7 @@ def hinderedRotor(scanLog, pivots, top, symmetry=None, fit='best'):
 
 def hinderedRotor1DArray(angles, energies, pivots, top, symmetry=None, fit='best'):
     """Read a hindered rotor PES profile, and return the attributes in a list"""
-    return [angles, energies, top, pivots, symmetry, fit]
+    return [angles, energies, pivots, top, symmetry, fit]
 
 def freeRotor(pivots, top, symmetry):
     """Read a free rotor directive, and return the attributes in a list"""
