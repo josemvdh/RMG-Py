@@ -96,7 +96,6 @@ class ScanLog(object):
         angles (in radians) and energies (in J/mol).
         """
         file_ext = pathlib.Path(self.path).suffix
-        print(file_ext.lower())
         if file_ext.lower() == '.csv':
             angle_unit, energy_unit, angles, energies = self.load_csv()
         elif file_ext.lower() in ['.yml', '.yaml']:
@@ -134,7 +133,6 @@ class ScanLog(object):
         # In case, the user's csv file has no header. Use the default header and units.
         if df.columns[0][0].isnumeric():
             df = pd.read_csv(self.path, names=['Angle (radians)', 'Energy (J/mol)'])
-            print(df.head())
         for column in df.columns:
             if 'angle' in column.lower():
                 try:
